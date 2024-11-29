@@ -1,0 +1,94 @@
+package mobile;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.Random;
+public class MobileTrackingSystem extends JFrame {
+    private JLabel locationLabel; // Label to display current location
+    private JButton trackButton, lockButton, eraseButton; // Buttons for actions
+    private JTextArea logArea; // Text area to display logs
+    private Random random; // Random generator for simulating location
+
+    // Constructor for initializing the Mobile Tracking System UI
+    public MobileTrackingSystem() {
+        // Setting frame properties
+        setTitle("Mobile Tracking System");
+        setSize(500, 400);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        random = new Random(); // Initialize random number generator
+
+        // Top Panel for displaying the current location
+        JPanel topPanel = new JPanel(new FlowLayout());
+        locationLabel = new JLabel("Current Location: Latitude: -, Longitude: -");
+        locationLabel.setOpaque(true);
+        locationLabel.setBackground(Color.WHITE);
+        locationLabel.setForeground(Color.BLACK);
+        locationLabel.setPreferredSize(new Dimension(450, 30));
+        topPanel.add(locationLabel);
+
+        // Center Panel for the log area
+        logArea = new JTextArea(10, 40);
+        logArea.setEditable(false); // Make log area read-only
+        logArea.setBackground(Color.LIGHT_GRAY);
+        logArea.setForeground(Color.BLACK);
+        JScrollPane scrollPane = new JScrollPane(logArea); // Add scrollable log area
+
+        // Bottom Panel for action buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout());
+        trackButton = new JButton("Track Location");
+        lockButton = new JButton("Lock Device");
+        eraseButton = new JButton("Erase Data");
+
+        // Set button colors
+        trackButton.setBackground(Color.GREEN);
+        trackButton.setForeground(Color.WHITE);
+
+        lockButton.setBackground(Color.ORANGE);
+        lockButton.setForeground(Color.BLACK);
+
+        eraseButton.setBackground(Color.RED);
+        eraseButton.setForeground(Color.WHITE);
+
+        // Add buttons to bottom panel
+        bottomPanel.add(trackButton);
+        bottomPanel.add(lockButton);
+        bottomPanel.add(eraseButton);
+
+        // Add components to the frame
+        add(topPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        // Add event listeners to buttons
+        trackButton.addActionListener(e -> trackLocation());
+        lockButton.addActionListener(e -> logAction("Device locked remotely."));
+        eraseButton.addActionListener(e -> logAction("Device data erased remotely."));
+
+        setVisible(true); // Make the frame visible
+    }
+
+    // Method to simulate location tracking
+    private void trackLocation() {
+        double latitude = -90 + (random.nextDouble() * 180); // Latitude: -90 to 90
+        double longitude = -180 + (random.nextDouble() * 360); // Longitude: -180 to 180
+
+        // Update the location label with the simulated location
+        locationLabel.setText(String.format("Current Location: Latitude: %.2f, Longitude: %.2f", latitude, longitude));
+
+        // Log the action
+        logAction(String.format("Tracked Location: Latitude: %.2f, Longitude: %.2f", latitude, longitude));
+    }
+
+    // Method to log actions in the text area
+    private void logAction(String action) {
+        logArea.append(action + "\n"); // Append the action to the log area
+    }
+
+    // Main method to launch the application
+    public static void main(String[] args) {
+        new MobileTrackingSystem(); // Create and show the application
+    }
+}
+
